@@ -11,10 +11,6 @@ namespace Marketplace.Domain
 
         protected Money(decimal amount, string currencyCode, ICurrencyLookup currencyLookup)
         {
-            if (decimal.Round(amount, 2) != amount)
-                throw new ArgumentOutOfRangeException(
-                    nameof(amount), "Amount cannot have more than 2 decimals");
-
             var currency = currencyLookup.FindCurrency(currencyCode);
             if (!currency.InUse)
                 throw new ArgumentException(
