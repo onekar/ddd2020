@@ -15,6 +15,6 @@ namespace Marketplace.Domain
             this.value = value;
         }
 
-        public static ClassifiedAdTitle FromString(string title) => new ClassifiedAdTitle(title);
+        public static ClassifiedAdTitle Create(string title) => new ClassifiedAdTitle(title);
     }
 }

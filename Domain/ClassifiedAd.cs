@@ -1,27 +1,75 @@
-﻿
-using System;
+﻿using Marketplace.Framework;
 
 namespace Marketplace.Domain
 {
-    public class ClassifiedAd
+    public class ClassifiedAd : Entity<ClassifiedAdId>
     {
-        private UserId ownerId;
-        private string title;
-        private string text;
-        private decimal price;
-
         public ClassifiedAdId Id { get; }
+        public UserId OwnerId { get; }
+        public ClassifiedAdTitle Title { get; private set; }
+        public ClassifiedAdText Text { get; private set; }
+        public Price Price { get; private set; }
+        public ClassiefiedAdState State { get; private set; }
+        public UserId ApprovedBy { get; private set; }
 
         public ClassifiedAd(ClassifiedAdId id, UserId ownerId)
         {
             Id = id;
-            this.ownerId = ownerId;
+            OwnerId = ownerId;
+            State = ClassiefiedAdState.Inactive;
+            EnsureValidState();
         }
 
-        public void SetTitle(string title) => this.title = title;
+        public void SetTitle(ClassifiedAdTitle title)
+        {
+            Title = title;
+            EnsureValidState();
+        }
 
-        public void UpdateText(string text) => this.text = text;
+        public void UpdateText(ClassifiedAdText text)
+        {
+            Text = text;
+            EnsureValidState();
+        }
 
-        public void UpdatePrice(decimal price) => this.price = price;
+        public void UpdatePrice(Price price)
+        {
+            Price = price;
+            EnsureValidState();
+        }
+
+        public void RequestToPublish()
+        {
+            State = ClassiefiedAdState.PendingReview;
+            EnsureValidState();
+        }
+
+        protected override void EnsureValidState()
+        {
+            var valid =
+                Id != null &&
+                OwnerId != null &&
+                (State switch
+                {
+                    ClassiefiedAdState.PendingReview =>
+                        Title != null
+                        && Text != null
+                        && Price?.Amount > 0,
+                    ClassiefiedAdState.Active =>
+                        Title != null
+                        && Text != null
+                        && Price?.Amount > 0
+                        && ApprovedBy != null,
+                    _ => true
+                });
+
+            if (!valid)
+                throw new InvalidEntityStateException(this, $"Post-checks failed in state {State}");
+        }
+
+        protected override void When(object @event)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
