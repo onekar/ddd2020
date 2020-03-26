@@ -1,6 +1,6 @@
 ﻿namespace Marketplace.Domain
 {
-    public enum ClassiefiedAdState
+    public enum ClassifiedAdState
     {
         PendingReview,
         Active,
