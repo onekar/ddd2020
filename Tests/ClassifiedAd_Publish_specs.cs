@@ -25,7 +25,7 @@ namespace Marketplace.Tests
 
             classifiedAd.RequestToPublish();
 
-            Assert.Equal(ClassiefiedAdState.PendingReview, classifiedAd.State);
+            Assert.Equal(ClassifiedAdState.PendingReview, classifiedAd.State);
         }
 
         [Fact]

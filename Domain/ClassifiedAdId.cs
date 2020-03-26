@@ -1,5 +1,4 @@
-﻿using Marketplace.Framework;
-using System;
+﻿using System;
 
 namespace Marketplace.Domain
 {
@@ -14,6 +13,8 @@ namespace Marketplace.Domain
 
             this.value = value;
         }
+
+        public static implicit operator Guid(ClassifiedAdId classifiedAd) => classifiedAd.value;
 
         public bool Equals(ClassifiedAdId other)
         {

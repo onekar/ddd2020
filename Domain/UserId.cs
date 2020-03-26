@@ -14,5 +14,7 @@ namespace Marketplace.Domain
 
             this.value = value;
         }
+
+        public static implicit operator Guid(UserId userId) => userId.value;
     }
 }

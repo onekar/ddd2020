@@ -5,16 +5,22 @@ namespace Marketplace.Domain
 {
     public class ClassifiedAdTitle : Value<ClassifiedAdTitle>
     {
-        private readonly string value;
+        public string Value { get; }
 
-        private ClassifiedAdTitle(string value)
+        internal ClassifiedAdTitle(string title) => Value = title;
+        
+        public static ClassifiedAdTitle Create(string title)
+        {
+            CheckValidity(title);
+            return new ClassifiedAdTitle(title);
+        }
+
+        public static implicit operator string(ClassifiedAdTitle classifiedAdTitle) => classifiedAdTitle.Value;
+
+        private static void CheckValidity(string value)
         {
             if (value.Length > 100)
                 throw new ArgumentException("Title cannot be longer than 100 characters", nameof(value));
-
-            this.value = value;
         }
-
-        public static ClassifiedAdTitle Create(string title) => new ClassifiedAdTitle(title);
     }
 }
